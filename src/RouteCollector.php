@@ -37,7 +37,9 @@ class RouteCollector
      */
     public function addRoute($httpMethod, $route, $handler)
     {
-        $route = rtrim('/' . trim($this->currentGroupPrefix, '/') . '/' . trim($route, '/'), '/') ?: '/';
+        $currentGroupPrefix = trim($this->currentGroupPrefix, '/');
+        $currentGroupPrefix = $currentGroupPrefix ? '/' . $currentGroupPrefix : '';
+        $route = rtrim($currentGroupPrefix . '/' . trim($route, '/'), '/') ?: '/';
         $routeDatas = $this->routeParser->parse($route);
         foreach ((array)$httpMethod as $method) {
             foreach ($routeDatas as $routeData) {
