@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit backupGlobals="false"
+unit backupGlobals="false"
          backupStaticAttributes="false"
          colors="true"
          convertErrorsToExceptions="true"
@@ -11,7 +11,7 @@
          bootstrap="test/bootstrap.php"
         >
     <testsuites>
-        <testsuite name="FastRoute Tests">
+        <testsuite name="MiniRoute Tests">
             <directory>./test/</directory>
         </testsuite>
     </testsuites>

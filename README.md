@@ -1,4 +1,4 @@
-FastRoute - Fast request router for PHP
+MiniRoute - Fast request router for PHP
 =======================================
 
 > _forked from nikic/fast-route_
@@ -27,7 +27,7 @@ Here's a basic usage example:
 
 require '/path/to/vendor/autoload.php';
 
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = MiniRoute\simpleDispatcher(function(MiniRoute\RouteCollector $r) {
     $r->addRoute('GET', '/users', 'get_all_users_handler');
     // {id} must be a number (\d+)
     $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
@@ -47,14 +47,14 @@ $uri = rawurldecode($uri);
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
-    case FastRoute\Dispatcher::NOT_FOUND:
+    case MiniRoute\Dispatcher::NOT_FOUND:
         // ... 404 Not Found
         break;
-    case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+    case MiniRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
         // ... 405 Method Not Allowed
         break;
-    case FastRoute\Dispatcher::FOUND:
+    case MiniRoute\Dispatcher::FOUND:
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
         // ... call $handler with $vars
@@ -64,8 +64,8 @@ switch ($routeInfo[0]) {
 
 ### Defining routes
 
-The routes are defined by calling the `FastRoute\simpleDispatcher()` function, which accepts
-a callable taking a `FastRoute\RouteCollector` instance. The routes are added by calling
+The routes are defined by calling the `MiniRoute\simpleDispatcher()` function, which accepts
+a callable taking a `MiniRoute\RouteCollector` instance. The routes are added by calling
 `addRoute()` on the collector instance:
 
 ```php
@@ -121,7 +121,7 @@ $r->addRoute('GET', '/user[/{id:\d+}]/{name}', 'handler');
 ```
 
 The `$handler` parameter does not necessarily have to be a callback, it could also be a controller
-class name or any other kind of data you wish to associate with the route. FastRoute only tells you
+class name or any other kind of data you wish to associate with the route. MiniRoute only tells you
 which handler corresponds to your URI, how you interpret it is up to you.
 
 #### Shorcut methods for common request methods
@@ -173,7 +173,7 @@ routing data and construct the dispatcher from the cached information:
 ```php
 <?php
 
-$dispatcher = FastRoute\cachedDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = MiniRoute\cachedDispatcher(function(MiniRoute\RouteCollector $r) {
     $r->addRoute('GET', '/user/{name}/{id:[0-9]+}', 'handler0');
     $r->addRoute('GET', '/user/{id:[0-9]+}', 'handler1');
     $r->addRoute('GET', '/user/{name}', 'handler2');
@@ -197,10 +197,10 @@ of `Dispatcher::NOT_FOUND`, `Dispatcher::METHOD_NOT_ALLOWED` and `Dispatcher::FO
 method not allowed status the second array element contains a list of HTTP methods allowed for
 the supplied URI. For example:
 
-    [FastRoute\Dispatcher::METHOD_NOT_ALLOWED, ['GET', 'POST']]
+    [MiniRoute\Dispatcher::METHOD_NOT_ALLOWED, ['GET', 'POST']]
 
 > **NOTE:** The HTTP specification requires that a `405 Method Not Allowed` response include the
-`Allow:` header to detail available methods for the requested resource. Applications using FastRoute
+`Allow:` header to detail available methods for the requested resource. Applications using MiniRoute
 should use the second array element to add this header when relaying a 405 response.
 
 For the found status the second array element is the handler that was associated with the route
@@ -208,7 +208,7 @@ and the third array element is a dictionary of placeholder names to their values
 
     /* Routing against GET /user/overlu/42 */
 
-    [FastRoute\Dispatcher::FOUND, 'handler0', ['name' => 'overlu', 'id' => '42']]
+    [MiniRoute\Dispatcher::FOUND, 'handler0', ['name' => 'overlu', 'id' => '42']]
 
 ### Overriding the route parser and dispatcher
 
@@ -218,7 +218,7 @@ dispatcher. The three components adhere to the following interfaces:
 ```php
 <?php
 
-namespace FastRoute;
+namespace MiniRoute;
 
 interface RouteParser {
     public function parse($route);
@@ -273,12 +273,12 @@ through the options array:
 ```php
 <?php
 
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = MiniRoute\simpleDispatcher(function(MiniRoute\RouteCollector $r) {
     /* ... */
 }, [
-    'routeParser' => 'FastRoute\\RouteParser\\Std',
-    'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
-    'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
+    'routeParser' => 'MiniRoute\\RouteParser\\Std',
+    'dataGenerator' => 'MiniRoute\\DataGenerator\\GroupCountBased',
+    'dispatcher' => 'MiniRoute\\Dispatcher\\GroupCountBased',
 ]);
 ```
 
@@ -295,9 +295,9 @@ To avoid forcing users to manually register HEAD routes for each resource we fal
 available GET route for a given resource. The PHP web SAPI transparently removes the entity body
 from HEAD responses so this behavior has no effect on the vast majority of users.
 
-However, implementers using FastRoute outside the web SAPI environment (e.g. a custom server) MUST
+However, implementers using MiniRoute outside the web SAPI environment (e.g. a custom server) MUST
 NOT send entity bodies generated in response to HEAD requests. If you are a non-SAPI user this is
-*your responsibility*; FastRoute has no purview to prevent you from breaking HTTP in such cases.
+*your responsibility*; MiniRoute has no purview to prevent you from breaking HTTP in such cases.
 
 Finally, note that applications MAY always specify their own HEAD method route for a given
 resource to bypass this behavior entirely.

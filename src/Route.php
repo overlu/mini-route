@@ -1,17 +1,22 @@
 <?php
+/**
+ * This file is part of Mini.
+ * @auth lupeng
+ */
+declare(strict_types=1);
 
-namespace FastRoute;
+namespace MiniRoute;
 
 class Route
 {
     /** @var string */
-    public $httpMethod;
+    public string $httpMethod = '';
 
     /** @var string */
-    public $regex;
+    public string $regex = '';
 
     /** @var array */
-    public $variables;
+    public array $variables = [];
 
     /** @var mixed */
     public $handler;
@@ -20,11 +25,11 @@ class Route
      * Constructs a route (value object).
      *
      * @param string $httpMethod
-     * @param mixed  $handler
+     * @param mixed $handler
      * @param string $regex
-     * @param array  $variables
+     * @param array $variables
      */
-    public function __construct($httpMethod, $handler, $regex, $variables)
+    public function __construct(string $httpMethod, $handler, string $regex, array $variables)
     {
         $this->httpMethod = $httpMethod;
         $this->handler = $handler;
@@ -39,9 +44,9 @@ class Route
      *
      * @return bool
      */
-    public function matches($str)
+    public function matches(string $str): bool
     {
         $regex = '~^' . $this->regex . '$~';
-        return (bool) preg_match($regex, $str);
+        return (bool)preg_match($regex, $str);
     }
 }

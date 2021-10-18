@@ -1,17 +1,22 @@
 <?php
+/**
+ * This file is part of Mini.
+ * @auth lupeng
+ */
+declare(strict_types=1);
 
-namespace FastRoute;
+namespace MiniRoute;
 
 class RouteCollector
 {
     /** @var RouteParser */
-    protected $routeParser;
+    protected RouteParser $routeParser;
 
     /** @var DataGenerator */
-    protected $dataGenerator;
+    protected DataGenerator $dataGenerator;
 
     /** @var string */
-    protected $currentGroupPrefix;
+    protected string $currentGroupPrefix;
 
     /**
      * Constructs a route collector.
@@ -35,7 +40,7 @@ class RouteCollector
      * @param string $route
      * @param mixed $handler
      */
-    public function addRoute($httpMethod, $route, $handler)
+    public function addRoute($httpMethod, string $route, $handler): void
     {
         $currentGroupPrefix = trim($this->currentGroupPrefix, '/');
         $currentGroupPrefix = $currentGroupPrefix ? '/' . $currentGroupPrefix : '';
@@ -56,7 +61,7 @@ class RouteCollector
      * @param string $prefix
      * @param callable $callback
      */
-    public function addGroup($prefix, callable $callback)
+    public function addGroup(string $prefix, callable $callback): void
     {
         $previousGroupPrefix = $this->currentGroupPrefix;
         $this->currentGroupPrefix = $previousGroupPrefix . '/' . trim($prefix, '/');
@@ -72,7 +77,7 @@ class RouteCollector
      * @param string $route
      * @param mixed $handler
      */
-    public function get($route, $handler)
+    public function get(string $route, $handler): void
     {
         $this->addRoute('GET', $route, $handler);
     }
@@ -85,7 +90,7 @@ class RouteCollector
      * @param string $route
      * @param mixed $handler
      */
-    public function post($route, $handler)
+    public function post(string $route, $handler): void
     {
         $this->addRoute('POST', $route, $handler);
     }
@@ -98,7 +103,7 @@ class RouteCollector
      * @param string $route
      * @param mixed $handler
      */
-    public function put($route, $handler)
+    public function put(string $route, $handler): void
     {
         $this->addRoute('PUT', $route, $handler);
     }
@@ -111,7 +116,7 @@ class RouteCollector
      * @param string $route
      * @param mixed $handler
      */
-    public function delete($route, $handler)
+    public function delete(string $route, $handler): void
     {
         $this->addRoute('DELETE', $route, $handler);
     }
@@ -124,7 +129,7 @@ class RouteCollector
      * @param string $route
      * @param mixed $handler
      */
-    public function patch($route, $handler)
+    public function patch(string $route, $handler): void
     {
         $this->addRoute('PATCH', $route, $handler);
     }
@@ -137,7 +142,7 @@ class RouteCollector
      * @param string $route
      * @param mixed $handler
      */
-    public function head($route, $handler)
+    public function head(string $route, $handler): void
     {
         $this->addRoute('HEAD', $route, $handler);
     }
@@ -147,7 +152,7 @@ class RouteCollector
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->dataGenerator->getData();
     }

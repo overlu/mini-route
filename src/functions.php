@@ -1,21 +1,31 @@
 <?php
+/**
+ * This file is part of Mini.
+ * @auth lupeng
+ */
+declare(strict_types=1);
 
-namespace FastRoute;
+namespace MiniRoute;
 
-if (!function_exists('FastRoute\simpleDispatcher')) {
+use MiniRoute\RouteParser\Std;
+use MiniRoute\DataGenerator\GroupCountBased;
+use MiniRoute\RouteCollector;
+use RuntimeException;
+
+if (!function_exists('MiniRoute\simpleDispatcher')) {
     /**
      * @param callable $routeDefinitionCallback
      * @param array $options
      *
      * @return Dispatcher
      */
-    function simpleDispatcher(callable $routeDefinitionCallback, array $options = [])
+    function simpleDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
-            'routeParser' => 'FastRoute\\RouteParser\\Std',
-            'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
-            'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
-            'routeCollector' => 'FastRoute\\RouteCollector',
+            'routeParser' => Std::class,
+            'dataGenerator' => GroupCountBased::class,
+            'dispatcher' => Dispatcher\GroupCountBased::class,
+            'routeCollector' => RouteCollector::class,
         ];
 
         /** @var RouteCollector $routeCollector */
@@ -33,13 +43,13 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
      *
      * @return Dispatcher
      */
-    function cachedDispatcher(callable $routeDefinitionCallback, array $options = [])
+    function cachedDispatcher(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
-            'routeParser' => 'FastRoute\\RouteParser\\Std',
-            'dataGenerator' => 'FastRoute\\DataGenerator\\GroupCountBased',
-            'dispatcher' => 'FastRoute\\Dispatcher\\GroupCountBased',
-            'routeCollector' => 'FastRoute\\RouteCollector',
+            'routeParser' => Std::class,
+            'dataGenerator' => GroupCountBased::class,
+            'dispatcher' => Dispatcher\GroupCountBased::class,
+            'routeCollector' => RouteCollector::class,
             'cacheDisabled' => false,
         ];
 
@@ -50,7 +60,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
         if (!$options['cacheDisabled'] && file_exists($options['cacheFile'])) {
             $dispatchData = require $options['cacheFile'];
             if (!is_array($dispatchData)) {
-                throw new \RuntimeException('Invalid cache file "' . $options['cacheFile'] . '"');
+                throw new RuntimeException('Invalid cache file "' . $options['cacheFile'] . '"');
             }
             return new $options['dispatcher']($dispatchData);
         }

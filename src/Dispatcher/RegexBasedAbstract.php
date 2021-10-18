@@ -1,25 +1,30 @@
 <?php
+/**
+ * This file is part of Mini.
+ * @auth lupeng
+ */
+declare(strict_types=1);
 
-namespace FastRoute\Dispatcher;
+namespace MiniRoute\Dispatcher;
 
-use FastRoute\Dispatcher;
+use MiniRoute\Dispatcher;
 
 abstract class RegexBasedAbstract implements Dispatcher
 {
     /** @var mixed[][] */
-    protected $staticRouteMap = [];
+    protected array $staticRouteMap = [];
 
     /** @var mixed[] */
-    protected $variableRouteData = [];
+    protected array $variableRouteData = [];
 
     /**
      * @param $routeData
      * @param $uri
      * @return mixed[]
      */
-    abstract protected function dispatchVariableRoute($routeData, $uri);
+    abstract protected function dispatchVariableRoute(array $routeData, string $uri): array;
 
-    public function dispatch($httpMethod, $uri)
+    public function dispatch(string $httpMethod, string $uri): array
     {
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
             $handler = $this->staticRouteMap[$httpMethod][$uri];

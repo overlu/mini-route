@@ -1,15 +1,20 @@
 <?php
+/**
+ * This file is part of Mini.
+ * @auth lupeng
+ */
+declare(strict_types=1);
 
-namespace FastRoute\DataGenerator;
+namespace MiniRoute\DataGenerator;
 
 class MarkBased extends RegexBasedAbstract
 {
-    protected function getApproxChunkSize()
+    protected function getApproxChunkSize(): int
     {
         return 30;
     }
 
-    protected function processChunk($regexToRoutesMap)
+    protected function processChunk($regexToRoutesMap): array
     {
         $routeMap = [];
         $regexes = [];

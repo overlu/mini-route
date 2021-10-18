@@ -1,30 +1,36 @@
 <?php
+/**
+ * This file is part of Mini.
+ * @auth lupeng
+ */
+declare(strict_types=1);
 
-namespace FastRoute\DataGenerator;
+namespace MiniRoute\DataGenerator;
 
-use FastRoute\BadRouteException;
-use FastRoute\DataGenerator;
-use FastRoute\Route;
+use MiniRoute\BadRouteException;
+use MiniRoute\DataGenerator;
+use MiniRoute\Route;
 
 abstract class RegexBasedAbstract implements DataGenerator
 {
     /** @var mixed[][] */
-    protected $staticRoutes = [];
+    protected array $staticRoutes = [];
 
     /** @var Route[][] */
-    protected $methodToRegexToRoutesMap = [];
+    protected array $methodToRegexToRoutesMap = [];
 
     /**
      * @return int
      */
-    abstract protected function getApproxChunkSize();
+    abstract protected function getApproxChunkSize(): int;
 
     /**
+     * @param $regexToRoutesMap
      * @return mixed[]
      */
-    abstract protected function processChunk($regexToRoutesMap);
+    abstract protected function processChunk($regexToRoutesMap): array;
 
-    public function addRoute($httpMethod, $routeData, $handler)
+    public function addRoute(string $httpMethod, array $routeData, $handler): void
     {
         if ($this->isStaticRoute($routeData)) {
             $this->addStaticRoute($httpMethod, $routeData, $handler);
@@ -36,7 +42,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     /**
      * @return mixed[]
      */
-    public function getData()
+    public function getData(): array
     {
         if (empty($this->methodToRegexToRoutesMap)) {
             return [$this->staticRoutes, []];
@@ -48,7 +54,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     /**
      * @return mixed[]
      */
-    private function generateVariableRouteData()
+    private function generateVariableRouteData(): array
     {
         $data = [];
         foreach ($this->methodToRegexToRoutesMap as $method => $regexToRoutesMap) {
@@ -63,22 +69,22 @@ abstract class RegexBasedAbstract implements DataGenerator
      * @param int
      * @return int
      */
-    private function computeChunkSize($count)
+    private function computeChunkSize($count): int
     {
         $numParts = max(1, round($count / $this->getApproxChunkSize()));
-        return (int) ceil($count / $numParts);
+        return (int)ceil($count / $numParts);
     }
 
     /**
      * @param mixed[]
      * @return bool
      */
-    private function isStaticRoute($routeData)
+    private function isStaticRoute(array $routeData): bool
     {
         return count($routeData) === 1 && is_string($routeData[0]);
     }
 
-    private function addStaticRoute($httpMethod, $routeData, $handler)
+    private function addStaticRoute(string $httpMethod, array $routeData, $handler): void
     {
         $routeStr = $routeData[0];
 
@@ -103,9 +109,9 @@ abstract class RegexBasedAbstract implements DataGenerator
         $this->staticRoutes[$httpMethod][$routeStr] = $handler;
     }
 
-    private function addVariableRoute($httpMethod, $routeData, $handler)
+    private function addVariableRoute(string $httpMethod, array $routeData, $handler): void
     {
-        list($regex, $variables) = $this->buildRegexForRoute($routeData);
+        [$regex, $variables] = $this->buildRegexForRoute($routeData);
 
         if (isset($this->methodToRegexToRoutesMap[$httpMethod][$regex])) {
             throw new BadRouteException(sprintf(
@@ -123,7 +129,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      * @param mixed[]
      * @return mixed[]
      */
-    private function buildRegexForRoute($routeData)
+    private function buildRegexForRoute(array $routeData): array
     {
         $regex = '';
         $variables = [];
@@ -159,7 +165,7 @@ abstract class RegexBasedAbstract implements DataGenerator
      * @param string
      * @return bool
      */
-    private function regexHasCapturingGroups($regex)
+    private function regexHasCapturingGroups(string $regex): bool
     {
         if (false === strpos($regex, '(')) {
             // Needs to have at least a ( to contain a capturing group
@@ -167,7 +173,7 @@ abstract class RegexBasedAbstract implements DataGenerator
         }
 
         // Semi-accurate detection for capturing groups
-        return (bool) preg_match(
+        return (bool)preg_match(
             '~
                 (?:
                     \(\?\(

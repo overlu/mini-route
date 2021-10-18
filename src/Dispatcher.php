@@ -1,12 +1,17 @@
 <?php
+/**
+ * This file is part of Mini.
+ * @auth lupeng
+ */
+declare(strict_types=1);
 
-namespace FastRoute;
+namespace MiniRoute;
 
 interface Dispatcher
 {
-    const NOT_FOUND = 0;
-    const FOUND = 1;
-    const METHOD_NOT_ALLOWED = 2;
+    public const NOT_FOUND = 0;
+    public const FOUND = 1;
+    public const METHOD_NOT_ALLOWED = 2;
 
     /**
      * Dispatches against the provided HTTP method verb and URI.
@@ -22,5 +27,5 @@ interface Dispatcher
      *
      * @return array
      */
-    public function dispatch($httpMethod, $uri);
+    public function dispatch(string $httpMethod, string $uri): array;
 }

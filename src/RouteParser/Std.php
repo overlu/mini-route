@@ -1,9 +1,14 @@
 <?php
+/**
+ * This file is part of Mini.
+ * @auth lupeng
+ */
+declare(strict_types=1);
 
-namespace FastRoute\RouteParser;
+namespace MiniRoute\RouteParser;
 
-use FastRoute\BadRouteException;
-use FastRoute\RouteParser;
+use MiniRoute\BadRouteException;
+use MiniRoute\RouteParser;
 
 /**
  * Parses route strings of the following form:
@@ -12,7 +17,7 @@ use FastRoute\RouteParser;
  */
 class Std implements RouteParser
 {
-    const VARIABLE_REGEX = <<<'REGEX'
+    public const VARIABLE_REGEX = <<<'REGEX'
 \{
     \s* ([a-zA-Z_][a-zA-Z0-9_-]*) \s*
     (?:
@@ -20,9 +25,9 @@ class Std implements RouteParser
     )?
 \}
 REGEX;
-    const DEFAULT_DISPATCH_REGEX = '[^/]+';
+    public const DEFAULT_DISPATCH_REGEX = '[^/]+';
 
-    public function parse($route)
+    public function parse(string $route): array
     {
         $routeWithoutClosingOptionals = rtrim($route, ']');
         $numOptionals = strlen($route) - strlen($routeWithoutClosingOptionals);
@@ -56,7 +61,7 @@ REGEX;
      * @param string
      * @return mixed[]
      */
-    private function parsePlaceholders($route)
+    private function parsePlaceholders(string $route): array
     {
         if (!preg_match_all(
             '~' . self::VARIABLE_REGEX . '~x', $route, $matches,

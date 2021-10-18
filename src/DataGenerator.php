@@ -1,6 +1,11 @@
 <?php
+/**
+ * This file is part of Mini.
+ * @auth lupeng
+ */
+declare(strict_types=1);
 
-namespace FastRoute;
+namespace MiniRoute;
 
 interface DataGenerator
 {
@@ -16,7 +21,7 @@ interface DataGenerator
      * @param array $routeData
      * @param mixed $handler
      */
-    public function addRoute($httpMethod, $routeData, $handler);
+    public function addRoute(string $httpMethod, array $routeData, $handler);
 
     /**
      * Returns dispatcher data in some unspecified format, which
