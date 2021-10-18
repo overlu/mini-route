@@ -12,7 +12,7 @@ Install
 To install with composer:
 
 ```sh
-composer require overlu/fast-route
+composer require overlu/mini-route
 ```
 
 Requires PHP 5.4 or newer.
