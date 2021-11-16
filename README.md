@@ -15,7 +15,7 @@ To install with composer:
 composer require overlu/mini-route
 ```
 
-Requires PHP 5.4 or newer.
+Requires PHP 7.4 or newer.
 
 Usage
 -----
