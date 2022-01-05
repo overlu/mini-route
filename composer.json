@@ -1,13 +1,19 @@
 {
     "name": "overlu/mini-route",
     "description": "Fast request router for Mini Framework",
-    "keywords": ["mini", "routing", "router"],
+    "keywords": [
+        "mini",
+        "routing",
+        "router"
+    ],
     "license": "MIT",
     "autoload": {
         "psr-4": {
-          "MiniRoute\\": "src/"
+            "MiniRoute\\": "src/"
         },
-        "files": ["src/functions.php"]
+        "files": [
+            "src/functions.php"
+        ]
     },
     "require": {
         "php": ">=7.4"
